@@ -3,7 +3,6 @@ FROM ubuntu
 RUN apt-get update
 
 RUN apt-get install -y software-properties-common git jq net-tools netcat curl wget
-
 RUN apt-get update
 
 RUN add-apt-repository ppa:longsleep/golang-backports && apt update && apt -y install golang-go
@@ -33,5 +32,9 @@ RUN echo 'export AWS_SECRET_ACCESS_KEY=$(curl http://$AWS_METADATA_IP$AWS_CONTAI
 RUN echo 'export AWS_SESSION_TOKEN=$(curl http://$AWS_METADATA_IP$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq .Token -r)' >> ~/.bashrc
 
 RUN apt-get install -y lsof libcap2-bin
+
+COPY ./get_s3_obj.sh /get_s3_obj.sh
+
+COPY ./list_s3_buckets.sh /get_s3_obj.sh
 
 ENTRYPOINT ["gotty", "-w", "/bin/bash"]
